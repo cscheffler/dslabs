@@ -11,7 +11,7 @@ Key ideas:
 """
 
 import random
-from typing import Callable, Dict, Any, List, Tuple
+from typing import Callable, Dict, Any, List, Tuple, Set
 from .sim_scheduler import SimScheduler
 
 Action = List[Tuple[int, Dict[str, Any]]]
@@ -112,7 +112,7 @@ def duplicate(p=0.05):
     return _rule
 
 
-def partition(cut: set[tuple[str, str]]):
+def partition(cut: Set[Tuple[str, str]]):
     """Return a rule that blocks traffic for pairs in `cut`.
 
     The `cut` set contains undirected pairs like (`n1`,`n2`).

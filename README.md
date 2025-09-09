@@ -13,6 +13,8 @@ You will use this scaffold to complete various exercises during the tutorial. Th
 
 ## Install
 
+Requires Python 3.8.5 or newer.
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
