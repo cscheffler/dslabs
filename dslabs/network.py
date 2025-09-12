@@ -12,7 +12,7 @@ Key ideas:
 
 import random
 from typing import Callable, Dict, Any, List, Tuple
-from .sim_scheduler import SimScheduler
+from .scheduler import SimScheduler
 
 Action = List[Tuple[int, Dict[str, Any]]]
 
