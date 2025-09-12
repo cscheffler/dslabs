@@ -35,6 +35,11 @@ class SimNetwork:
         self.handlers: Dict[str, Callable[[Dict[str, Any]], None]] = {}
         self.rules: List[Callable[[str, str, Dict[str, Any], Action], Action]] = []
         self.rng = random.Random(seed)
+        self.stats = {
+            "dropped_messages": 0,
+            "delivered_messages": 0,
+            "duplicated_messages": 0,
+        }
 
     def register(self, node_id: str, handler: Callable[[Dict[str, Any]], None]) -> None:
         """Associate `node_id` with a message handler function.
@@ -63,13 +68,14 @@ class SimNetwork:
         actions: Action = [(base_delay, msg)]
         frm = msg.get("from", "?")
         for rule in self.rules:
-            actions = rule(frm, to, msg, actions)
+            actions = rule(frm, to, msg, actions, stats=self.stats)
         for at, payload in actions:
 
             def deliver(to=to, payload=payload):
                 h = self.handlers.get(to)
                 if h:
                     h(payload)
+                self.stats["delivered_messages"] += 1
 
             self.scheduler.call_later(at, deliver)
 
@@ -78,8 +84,11 @@ def drop(p=0.1):
     """Return a rule that drops each pending delivery with prob `p`."""
     import random
 
-    def _rule(frm, to, msg, actions: Action):
-        return [a for a in actions if random.random() > p]
+    def _rule(frm, to, msg, actions: Action, stats=None):
+        out = [a for a in actions if random.random() > p]
+        if stats is not None:
+            stats["dropped_messages"] += len(actions) - len(out)
+        return out
 
     return _rule
 
@@ -88,7 +97,7 @@ def delay(min_ms=100, max_ms=300):
     """Return a rule that adds a random delay in [min_ms, max_ms]."""
     import random
 
-    def _rule(frm, to, msg, actions: Action):
+    def _rule(frm, to, msg, actions: Action, stats=None):
         out = []
         for at, payload in actions:
             extra = random.randint(min_ms, max_ms)
@@ -102,11 +111,13 @@ def duplicate(p=0.05):
     """Return a rule that duplicates deliveries with prob `p`."""
     import random
 
-    def _rule(frm, to, msg, actions: Action):
+    def _rule(frm, to, msg, actions: Action, stats=None):
         out = list(actions)
         for at, payload in actions:
             if random.random() < p:
                 out.append((at + 1, payload.copy()))
+        if stats is not None:
+            stats["duplicated_messages"] += len(out) - len(actions)
         return out
 
     return _rule
@@ -118,7 +129,10 @@ def partition(cut: set[tuple[str, str]]):
     The `cut` set contains undirected pairs like (`n1`,`n2`).
     """
 
-    def _rule(frm, to, msg, actions: Action):
-        return [] if (frm, to) in cut or (to, frm) in cut else actions
+    def _rule(frm, to, msg, actions: Action, stats=None):
+        out = [] if (frm, to) in cut or (to, frm) in cut else actions
+        if stats is not None:
+            stats["dropped_messages"] += len(actions) - len(out)
+        return out
 
     return _rule
