@@ -2,13 +2,13 @@ import random
 
 import pytest
 
-from dslabs.simulations.sim_deliver_many import SimDeliverMany
+from dslabs.simulations.sim_send_many import SimSendMany
 from dslabs.nodes.node_multi_leader import NodeMultiLeader
 
 
 def _run(seed: int, **kwargs):
     random.seed(seed)
-    sim = SimDeliverMany(NodeMultiLeader, random_seed=seed, **kwargs)
+    sim = SimSendMany(NodeMultiLeader, random_seed=seed, **kwargs)
     sim.run_scenario()
     return sim
 

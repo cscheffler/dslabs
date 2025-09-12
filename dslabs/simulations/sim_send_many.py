@@ -4,9 +4,9 @@ from dslabs.nodes import NodeMultiLeader
 import random
 
 
-class SimDeliverMany:
+class SimSendMany:
     """
-    Deliver a write messages to nodes with a short delay between consecutive messages. The network
+    Send a write messages to nodes with a short delay between consecutive messages. The network
     might drop or delay some messages.
     """
 
@@ -76,7 +76,7 @@ class SimDeliverMany:
 
 
 def main():
-    sim = SimDeliverMany(
+    sim = SimSendMany(
         NodeMultiLeader, num_messages=10, message_delay=1000, drop_prob=0.5
     )
     sim.run_scenario()
