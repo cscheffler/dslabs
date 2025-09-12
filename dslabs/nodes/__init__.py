@@ -1,1 +1,2 @@
 from .node_multi_leader import NodeMultiLeader
+from .node_eager_broadcast import NodeEagerBroadcast
