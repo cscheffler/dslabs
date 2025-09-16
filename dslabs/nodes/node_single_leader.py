@@ -5,7 +5,8 @@ from typing import Dict, Any, List, Tuple, Set
 @dataclass
 class NodeSingleLeader:
     """
-    Single-leader nodes.
+    Single-leader nodes. Followers forward client messages to the leader. The leader assigns a
+    sequence number, stores a message, and replicates to all other nodes.
     """
 
     node_id: str
