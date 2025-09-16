@@ -5,11 +5,12 @@ import pytest
 from dslabs.simulations.sim_send_many import SimSendMany
 from dslabs.nodes.node_eager_broadcast import NodeEagerBroadcast
 from dslabs.nodes.node_single_leader import NodeSingleLeader
+from dslabs.nodes.node_total_order_eager_broadcast import NodeTotalOrderEagerBroadcast
 
 
 def _run(seed: int, **kwargs):
     random.seed(seed)
-    sim = SimSendMany(NodeEagerBroadcast, random_seed=seed, **kwargs)
+    sim = SimSendMany(NodeTotalOrderEagerBroadcast, random_seed=seed, **kwargs)
     sim.run_scenario()
     return sim
 
