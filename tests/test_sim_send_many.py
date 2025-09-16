@@ -4,6 +4,7 @@ import pytest
 
 from dslabs.simulations.sim_send_many import SimSendMany
 from dslabs.nodes.node_eager_broadcast import NodeEagerBroadcast
+from dslabs.nodes.node_single_leader import NodeSingleLeader
 
 
 def _run(seed: int, **kwargs):
@@ -52,6 +53,26 @@ def test_fails_with_drops_on_last_write_replication():
 
 @pytest.mark.xfail
 def test_fails_due_to_reordering_with_fast_client_rate():
+    """
+    Intentionally failing test: Even without drops, a fast client rate plus
+    variable network delay can cause older writes to arrive after newer ones,
+    leaving some nodes with stale final values.
+    """
+    num_messages = 20
+    sim = _run(
+        seed=42,
+        num_nodes=6,
+        num_messages=num_messages,
+        message_delay=10,  # << network delay range; invites reordering
+        drop_prob=0.0,  # we are _not_ dropping messages
+    )
+    values = sim.results["stored_values"]
+    # Strict requirement (expected to FAIL initially): everyone has the final value
+    assert len(set(values.values())) == 1
+
+
+@pytest.mark.xfail
+def test_fails_due_to_non_global_order():
     """
     Intentionally failing test: Even without drops, a fast client rate plus
     variable network delay can cause older writes to arrive after newer ones,
