@@ -1,1 +1,1 @@
-__all__ = ["protocols", "sim_network", "sim_scheduler"]
+__all__ = ["protocols", "network", "scheduler"]
