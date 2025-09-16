@@ -66,10 +66,12 @@ class SimSendMany:
 
             self.scheduler.call_later(at, event)
 
-        # Let time pass until replication messages likely delivered (2 seconds)
-        for _ in range(2000):
+        # Let time pass until all events occurred
+        while len(self.scheduler.heap) > 0:
             self.scheduler.run_due()
+            # Skip forward only a little since some events might queue new events
             self.clock.advance(10)
+
         self.results["stored_values"] = {
             k: n.client_get("x") for k, n in self.nodes.items()
         }
