@@ -3,9 +3,12 @@ import random
 import pytest
 
 from dslabs.simulations.sim_send_many import SimSendMany
-from dslabs.nodes.node_eager_broadcast import NodeEagerBroadcast
-from dslabs.nodes.node_single_leader import NodeSingleLeader
-from dslabs.nodes.node_total_order_eager_broadcast import NodeTotalOrderEagerBroadcast
+from dslabs.nodes import (
+    NodeMultiLeader,  # Passes the first unit test, but fails the rest
+    NodeEagerBroadcast,  # Passes tests 1 and 2 only
+    NodeSingleLeader,  # Passes tests 1 and 3 only
+    NodeTotalOrderEagerBroadcast,  # Passes all tests except the last one, which we always expect to fail
+)
 
 
 def _run(seed: int, **kwargs):
@@ -32,7 +35,6 @@ def test_converges_without_drops_when_spaced_out():
     assert set(values.values()) == {num_messages - 1}
 
 
-@pytest.mark.xfail
 def test_fails_with_drops_on_last_write_replication():
     """
     Intentionally failing test: With a high drop probability, the last write is
@@ -52,7 +54,6 @@ def test_fails_with_drops_on_last_write_replication():
     assert set(values.values()) == {num_messages - 1}
 
 
-@pytest.mark.xfail
 def test_fails_due_to_reordering_with_fast_client_rate():
     """
     Intentionally failing test: Even without drops, a fast client rate plus
