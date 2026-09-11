@@ -15,6 +15,8 @@ event without running it and ``step()`` runs exactly one event and returns a
 ``Step`` listing everything it caused.
 """
 
+from __future__ import annotations
+
 import heapq
 import inspect
 from dataclasses import dataclass, field

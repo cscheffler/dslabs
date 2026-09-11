@@ -11,6 +11,8 @@ In a notebook, a ``Diagram`` as the last expression of a cell renders inline.
 ``diagram.save("run.svg")`` writes it out for slides.
 """
 
+from __future__ import annotations
+
 import itertools
 import math
 from html import escape

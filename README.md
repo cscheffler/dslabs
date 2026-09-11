@@ -16,7 +16,10 @@ fixing the failures that occur in them.
 
 ## Install
 
-Requires Python 3.10 or newer.
+Requires Python 3.8.5 or newer. On a Python older than 3.9, upgrade pip first
+with `python -m pip install --upgrade "pip<25"`, or skip the install step: the
+tests run from the repository root as they are, and scripts only need
+`PYTHONPATH=.`.
 
 ```bash
 python -m venv .venv
@@ -67,6 +70,8 @@ Copy `dslabs/nodes/node_multi_leader.py` and change the behaviour.
 The outline is:
 
 ```python
+from __future__ import annotations  # lets annotations like list[str] work on Python 3.8
+
 from dataclasses import dataclass, field
 from typing import Any
 

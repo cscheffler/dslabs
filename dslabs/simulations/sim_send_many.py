@@ -11,6 +11,8 @@ Run it from the command line to watch a scenario play out::
     python -m dslabs.simulations.sim_send_many --node solutions:NodeEagerBroadcast
 """
 
+from __future__ import annotations
+
 import argparse
 import random
 from typing import Any, Callable

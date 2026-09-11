@@ -16,6 +16,8 @@ standalone viewer at ``dslabs/viewer.html``, and ``trace.save_viewer(path)``
 writes a single HTML file with the run embedded, ready to open in a browser.
 """
 
+from __future__ import annotations
+
 import json
 from dataclasses import asdict, dataclass, field
 from html import escape

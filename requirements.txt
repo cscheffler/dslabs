@@ -1,3 +1,4 @@
 # The simulator itself has no dependencies. This installs it in editable mode, plus pytest.
 -e .
-pytest>=8
+pytest>=8,<8.4; python_version < "3.9"
+pytest>=8; python_version >= "3.9"

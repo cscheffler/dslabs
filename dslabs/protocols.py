@@ -10,11 +10,13 @@ real time) and it will run unchanged in the deterministic simulator or in any
 future real runtime.
 """
 
-from typing import Any, Callable, Protocol, runtime_checkable
+from __future__ import annotations
+
+from typing import Any, Callable, Dict, Protocol, runtime_checkable
 
 # Messages are plain, JSON-serialisable dicts. The transport stamps the sender's
 # id into ``msg["from"]`` on every send, so a receiver always knows who sent it.
-Message = dict[str, Any]
+Message = Dict[str, Any]
 
 # Returned by ``Scheduler.call_later``. Call it to cancel the pending callback.
 Cancel = Callable[[], None]

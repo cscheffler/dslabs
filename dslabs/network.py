@@ -19,19 +19,21 @@ All randomness comes from a ``random.Random(seed)`` owned by the network, so
 the same seed always replays the same run.
 """
 
+from __future__ import annotations
+
 import json
 import random
-from typing import Any, Callable, Iterable
+from typing import Any, Callable, Iterable, List, Tuple
 
 from .protocols import Message, Scheduler
 from .trace import Trace, describe
 
 # One pending delivery: (milliseconds from now until delivery, message).
-Delivery = tuple[int, Message]
+Delivery = Tuple[int, Message]
 
 # A rule rewrites the pending deliveries of one send. It is called as
 # ``rule(frm, to, deliveries, rng)`` and returns the new list of deliveries.
-Rule = Callable[[str, str, list[Delivery], random.Random], list[Delivery]]
+Rule = Callable[[str, str, List[Delivery], random.Random], List[Delivery]]
 
 Handler = Callable[[Message], None]
 

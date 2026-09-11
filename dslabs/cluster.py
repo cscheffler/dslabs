@@ -16,6 +16,8 @@ This is only the three simulator objects wired together; ``cluster.scheduler``,
 ``cluster.network``, and ``cluster.nodes`` are all there if you need them.
 """
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Any, Callable, Sequence
 
