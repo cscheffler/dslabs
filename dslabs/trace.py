@@ -261,11 +261,11 @@ class Trace:
 
     def save_viewer(self, path: str | Path) -> Path:
         """Write a self-contained copy of the animated viewer with this trace embedded."""
-        template = VIEWER.read_text()
+        template = VIEWER.read_text(encoding='utf-8')
         assert _VIEWER_PLACEHOLDER in template, "viewer.html has lost its trace placeholder"
         payload = self.to_json().replace("</", "<\\/")  # never let message text close the script tag
         path = Path(path)
-        path.write_text(template.replace(_VIEWER_PLACEHOLDER, payload))
+        path.write_text(template.replace(_VIEWER_PLACEHOLDER, payload), encoding='utf-8')
         return path
 
 
